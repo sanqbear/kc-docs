@@ -1,0 +1,25 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go workspace file
+tmp/
+
+# IDE specific files
+.vscode
+.idea
+
+# .env file
+.env
+
+# OS X generated file
+.DS_Store
+
+# AI request markdown documents for code generation
+ai_feature_request/*
