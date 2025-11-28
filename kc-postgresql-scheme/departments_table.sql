@@ -22,7 +22,12 @@ create index idx_departments_leader_user_id on departments(leader_user_id);
 create index idx_departments_parent_department_id on departments(parent_department_id);
 create index idx_departments_is_visible on departments(is_visible);
 create index idx_departments_is_deleted on departments(is_deleted);
-create index idx_departments_name_gin on departments using gin (name);
+drop index if exists idx_departments_name_gin;
+create index idx_departments_name_gin on departments using gin (name gin_trgm_ops);
+
+create trigger trg_departments_update_at
+    before update on departments
+    for each row execute function update_timestamp();
 
 COMMENT ON TABLE departments IS 'department information table';
 COMMENT ON COLUMN departments.id IS 'internal unique sequence identifier, using on JOIN';

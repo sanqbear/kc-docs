@@ -15,7 +15,12 @@ create table common_codes (
     constraint uq_common_codes_category_code unique (category, code)
 );
 create unique index idx_common_codes_category_code on common_codes(category, code);
-create index idx_common_codes_name_gin on common_codes using GIN (name);
+drop index if exists idx_common_codes_name_gin;
+create index idx_common_codes_name_gin on common_codes using GIN (name gin_trgm_ops);
+
+create trigger trg_common_codes_update_at
+    before update on common_codes
+    for each row execute function update_timestamp();
 
 COMMENT ON TABLE common_codes IS 'common codes table for various categories';
 COMMENT ON COLUMN common_codes.id IS 'internal unique sequence identifier, using on JOIN';

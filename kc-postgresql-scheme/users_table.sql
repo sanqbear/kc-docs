@@ -44,7 +44,12 @@ create index idx_users_office_hash on users(contact_office_hash);
 create index idx_users_office_id on users(contact_office_id);
 create index idx_users_is_visible on users(is_visible);
 create index idx_users_is_deleted on users(is_deleted);
-create index idx_users_name_gin on users using GIN (name);
+drop index if exists idx_users_name_gin;
+create index idx_users_name_gin on users using GIN (name gin_trgm_ops);
+
+create trigger trg_users_update_at
+    before update on users
+    for each row execute function update_timestamp();
 
 COMMENT ON TABLE users IS 'user information table';
 
