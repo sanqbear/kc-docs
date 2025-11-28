@@ -28,6 +28,8 @@ create table users (
 	updated_at TIMESTAMPTZ not null default NOW(),
 	
     password_hash VARCHAR(255),
+    is_visible BOOLEAN not null default true,
+    is_deleted BOOLEAN not null default false,
 
 	constraint uq_users_email unique (email),
 	constraint uq_users_public_id unique (public_id),
@@ -40,6 +42,8 @@ create index idx_users_phone_hash on users(contact_mobile_hash);
 create index idx_users_phone_id on users(contact_mobile_id);
 create index idx_users_office_hash on users(contact_office_hash);
 create index idx_users_office_id on users(contact_office_id);
+create index idx_users_is_visible on users(is_visible);
+create index idx_users_is_deleted on users(is_deleted);
 create index idx_users_name_gin on users using GIN (name);
 
 COMMENT ON TABLE users IS 'user information table';
@@ -69,3 +73,5 @@ COMMENT ON COLUMN users.contact_office_id IS 'last 4 digits of the office phone 
 COMMENT ON COLUMN users.created_at IS 'record creation timestamp';
 COMMENT ON COLUMN users.updated_at IS 'record last update timestamp';
 COMMENT ON COLUMN users.password_hash IS 'hashed user password using argon2id algorithm, null if using SSO only';
+COMMENT ON COLUMN users.is_visible IS 'flag indicating if the user is visible in the organization chart';
+COMMENT ON COLUMN users.is_deleted IS 'flag indicating if the user is logically deleted';
