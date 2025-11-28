@@ -24,8 +24,8 @@ create table users (
     contact_office_hash VARCHAR(64),
     contact_office_id VARCHAR(4),
 
-	created_at TIMESTAMPZ not null default NOW(),
-	updated_at TIMESTAMPZ not null default NOW(),
+	created_at TIMESTAMPTZ not null default NOW(),
+	updated_at TIMESTAMPTZ not null default NOW(),
 	
     password_hash VARCHAR(255),
 
