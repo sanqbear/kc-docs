@@ -27,6 +27,8 @@ create table users (
 	created_at TIMESTAMPZ not null default NOW(),
 	updated_at TIMESTAMPZ not null default NOW(),
 	
+    password_hash VARCHAR(255),
+
 	constraint uq_users_email unique (email),
 	constraint uq_users_public_id unique (public_id),
     constraint uq_users_login_id unique (login_id)
@@ -66,3 +68,4 @@ COMMENT ON COLUMN users.contact_office_id IS 'last 4 digits of the office phone 
 
 COMMENT ON COLUMN users.created_at IS 'record creation timestamp';
 COMMENT ON COLUMN users.updated_at IS 'record last update timestamp';
+COMMENT ON COLUMN users.password_hash IS 'hashed user password using argon2id algorithm, null if using SSO only';
