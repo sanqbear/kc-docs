@@ -16,7 +16,7 @@ create table common_codes (
 );
 create unique index idx_common_codes_category_code on common_codes(category, code);
 drop index if exists idx_common_codes_name_gin;
-create index idx_common_codes_name_gin on common_codes using GIN (name gin_trgm_ops);
+create index idx_common_codes_name_gin on common_codes using GIN ((name::text) gin_trgm_ops);
 
 create trigger trg_common_codes_update_at
     before update on common_codes

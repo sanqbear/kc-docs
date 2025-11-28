@@ -23,7 +23,7 @@ create index idx_departments_parent_department_id on departments(parent_departme
 create index idx_departments_is_visible on departments(is_visible);
 create index idx_departments_is_deleted on departments(is_deleted);
 drop index if exists idx_departments_name_gin;
-create index idx_departments_name_gin on departments using gin (name gin_trgm_ops);
+create index idx_departments_name_gin on departments using gin ((name::text) gin_trgm_ops);
 
 create trigger trg_departments_update_at
     before update on departments
