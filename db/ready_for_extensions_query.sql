@@ -1,5 +1,21 @@
+-- Enable pg_trgm extension for trigram indexing
+
+CREATE SCHEMA IF NOT EXISTS organizations;
+CREATE SCHEMA IF NOT EXISTS ticket_systems;   
+CREATE SCHEMA IF NOT EXISTS extensions;   
+CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA public;
+ALTER DATABASE "knowledgecenter" SET search_path TO "$user", public, extensions;
+
 -- Function to update the updated_at timestamp on row modification
-CREATE OR REPLACE FUNCTION update_timestamp()
+CREATE OR REPLACE FUNCTION organizations.update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+-- Function to update the updated_at timestamp on row modification
+CREATE OR REPLACE FUNCTION ticket_systems.update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = NOW();
@@ -7,11 +23,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Enable pg_trgm extension for trigram indexing
-CREATE EXTENSION IF NOT EXISTS pg_trgm;
-
 -- Function to update the search_vector column for full-text search
-CREATE OR REPLACE FUNCTION update_entry_search_vector()
+CREATE OR REPLACE FUNCTION ticket_systems.update_entry_search_vector()
 RETURNS TRIGGER AS $$
 BEGIN
     -- 'english' 대신 'simple' 사용: 
