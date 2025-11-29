@@ -3,7 +3,8 @@
 CREATE SCHEMA IF NOT EXISTS organizations;
 CREATE SCHEMA IF NOT EXISTS ticket_systems;   
 CREATE SCHEMA IF NOT EXISTS extensions;   
-CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA public;
+CREATE SCHEMA IF NOT EXISTS managements;
+CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA extensions;
 ALTER DATABASE "knowledgecenter" SET search_path TO "$user", public, extensions;
 
 -- Function to update the updated_at timestamp on row modification
@@ -16,6 +17,14 @@ END;
 $$ LANGUAGE plpgsql;
 -- Function to update the updated_at timestamp on row modification
 CREATE OR REPLACE FUNCTION ticket_systems.update_timestamp()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+-- Function to update the updated_at timestamp on row modification
+CREATE OR REPLACE FUNCTION managements.update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = NOW();
