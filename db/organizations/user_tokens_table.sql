@@ -1,23 +1,20 @@
 -- knowledgecenter DB, organizations schema, user tokens table creation script
 create table organizations.user_tokens (
     id BIGINT generated always as identity primary key,
-    user_id INT not null,
+    user_id INT REFERENCES organizations.users(id) on delete cascade,
     token_hash VARCHAR(255) not null,
 
     expires_at TIMESTAMPTZ not null,
     is_revoked BOOLEAN not null default FALSE,
 
-    replaced_by_token_id BIGINT,
-    parent_token_id BIGINT,         -- token id when first logged in (for tracking token lineage)
+    replaced_by_token_id BIGINT REFERENCES organizations.user_tokens(id) on delete set null,
+    parent_token_id BIGINT REFERENCES organizations.user_tokens(id) on delete set null,         -- token id when first logged in (for tracking token lineage)
 
     client_ip INET,
     user_agent VARCHAR(1024),
 
     created_at TIMESTAMPTZ not null default now(),
     updated_at TIMESTAMPTZ not null default now()
-
-    CONSTRAINT fk_user_tokens_user foreign key (user_id) references organizations.users (id) on delete cascade,
-    CONSTRAINT fk_user_tokens_replaced_by_token foreign key (replaced_by_token_id) references organizations.user_tokens (id) on delete set null,
 );
 
 create index idx_user_tokens_user_id on organizations.user_tokens (user_id);
@@ -26,7 +23,7 @@ create index idx_user_tokens_token_hash on organizations.user_tokens (token_hash
 create trigger trg_user_tokens_updated_at
     before update on organizations.user_tokens
     for each row
-    execute function organizations.update_updated_at_column();
+    execute function organizations.update_timestamp();
 
 COMMENT ON TABLE organizations.user_tokens IS 'Table to store user authentication tokens for session management.';
 comment on column organizations.user_tokens.id IS 'Primary key for the user_tokens table.';
