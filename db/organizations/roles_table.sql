@@ -8,7 +8,7 @@ create table organizations.roles (
     updated_at timestamptz not null default now()
 );
 
-create index idx_roles_name_gin on organizations.roles using GIN ((name::text) gin_trgm_ops);
+create index idx_roles_name_gin on organizations.roles using GIN ((name::text) extensions.gin_trgm_ops);
 create trigger trg_roles_update_at
     before update on organizations.roles
     for each row execute function organizations.update_timestamp();

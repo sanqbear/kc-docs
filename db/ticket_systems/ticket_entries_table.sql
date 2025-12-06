@@ -37,7 +37,7 @@ CREATE TRIGGER trg_ticket_entries_search_vector
 
 DROP INDEX IF EXISTS idx_ticket_entries_search;
 CREATE INDEX idx_ticket_entries_search ON ticket_systems.ticket_entries USING GIN (search_vector);
-CREATE INDEX idx_ticket_entries_body_trgm ON ticket_systems.ticket_entries USING GIN (body gin_trgm_ops);
+CREATE INDEX idx_ticket_entries_body_trgm ON ticket_systems.ticket_entries USING GIN (body extensions.gin_trgm_ops);
 CREATE INDEX idx_ticket_entries_payload_gin ON ticket_systems.ticket_entries USING GIN (payload);
 
 COMMENT ON TABLE ticket_systems.ticket_entries IS 'table storing entries (comments, files, schedules, events) associated with tickets';

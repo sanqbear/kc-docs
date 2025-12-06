@@ -30,7 +30,7 @@ create index idx_tickets_title_gin on ticket_systems.tickets using GIN (title ex
 
 create trigger trg_tickets_update_at
     before update on ticket_systems.tickets
-    for each row execute function update_timestamp();
+    for each row execute function ticket_systems.update_timestamp();
 
 COMMENT ON TABLE ticket_systems.tickets IS 'support tickets table';
 COMMENT ON COLUMN ticket_systems.tickets.id IS 'internal unique sequence identifier, using on JOIN';

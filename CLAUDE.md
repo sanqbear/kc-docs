@@ -5,13 +5,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 Knowledge Center is a monorepo containing:
-- **kc-api-server**: Go REST API backend with chi router and PostgreSQL
-- **kc-web-client**: Vue 3 + TypeScript + Vite frontend
+- **server**: Go REST API backend with chi router and PostgreSQL
+- **client**: Vue 3 + TypeScript + Vite frontend
 - **db**: PostgreSQL schema definitions
 
 ## Common Commands
 
-### Backend (kc-api-server/)
+### Backend (server/)
 ```bash
 make build        # Build the application (outputs ./main)
 make run          # Run the application
@@ -23,7 +23,7 @@ make docker-down  # Stop PostgreSQL container
 make swag         # Generate Swagger documentation
 ```
 
-### Frontend (kc-web-client/)
+### Frontend (client/)
 ```bash
 npm run dev       # Start Vite dev server
 npm run build     # Type check and build for production
@@ -37,7 +37,7 @@ npm run preview   # Preview production build
 Uses Domain-Driven Design with Dependency Injection. All dependencies are assembled in `cmd/api/main.go`.
 
 ```
-kc-api-server/
+server/
   cmd/api/main.go              # Entry point, DI root, Swagger annotations
   internal/
     server/
@@ -59,7 +59,7 @@ kc-api-server/
 ### Frontend (Vue 3)
 
 ```
-kc-web-client/
+client/
   src/
     views/                     # Page components (Login, Register, Home, tickets/)
     components/                # Reusable components
@@ -90,5 +90,5 @@ Backend requires `.env` file (copy from `.env.sample`):
 ## API Documentation
 
 - Swagger UI: `http://localhost:8080/swagger/index.html`
-- See [kc-api-server/wiki/SWAG_GUIDELINES.md](kc-api-server/wiki/SWAG_GUIDELINES.md) for annotation conventions
+- See [server/wiki/SWAG_GUIDELINES.md](server/wiki/SWAG_GUIDELINES.md) for annotation conventions
 - Run `make swag` after modifying handler annotations

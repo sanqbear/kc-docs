@@ -23,7 +23,7 @@ create index idx_departments_parent_department_id on organizations.departments(p
 create index idx_departments_is_visible on organizations.departments(is_visible);
 create index idx_departments_is_deleted on organizations.departments(is_deleted);
 drop index if exists idx_departments_name_gin;
-create index idx_departments_name_gin on organizations.departments using GIN ((name::text) gin_trgm_ops);
+create index idx_departments_name_gin on organizations.departments using GIN ((name::text) extensions.gin_trgm_ops);
 
 create trigger trg_departments_update_at
     before update on organizations.departments

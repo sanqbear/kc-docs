@@ -10,8 +10,8 @@ create table organizations.groups (
 );
 
 create index idx_groups_public_id on organizations.groups(public_id);
-create index idx_groups_name_gin on organizations.groups using GIN ((name::text) gin_trgm_ops);
-create index idx_groups_description_gin on organizations.groups using GIN ((description::text) gin_trgm_ops);
+create index idx_groups_name_gin on organizations.groups using GIN ((name::text) extensions.gin_trgm_ops);
+create index idx_groups_description_gin on organizations.groups using GIN ((description::text) extensions.gin_trgm_ops);
 
 create trigger trg_groups_update_at
     before update on organizations.groups
