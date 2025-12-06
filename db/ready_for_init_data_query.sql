@@ -54,3 +54,65 @@ insert into organizations.group_roles (group_id, role_id)
 select g.id, r.id
 from organizations.groups g, organizations.roles r
 where g.public_id = 'sysadmin';
+
+
+
+  -- 이미지 전용 스토리지 (10MB 제한)
+  INSERT INTO managements.file_storages (
+      name,
+      storage_type,
+      base_path,
+      config,
+      status,
+      max_file_size,
+      allowed_mime_types,
+      is_default
+  ) VALUES (
+      'local-images',
+      'LOCAL',
+      './uploads/images',
+      '{"permissions": "0755"}'::jsonb,
+      'ACTIVE',
+      10485760,  -- 10MB
+      ARRAY['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+      false
+  );
+
+  -- 문서 전용 스토리지 (50MB 제한)
+  INSERT INTO managements.file_storages (
+      name,
+      storage_type,
+      base_path,
+      config,
+      status,
+      max_file_size,
+      allowed_mime_types,
+      is_default
+  ) VALUES (
+      'local-documents',
+      'LOCAL',
+      './uploads/documents',
+      '{"permissions": "0755"}'::jsonb,
+      'ACTIVE',
+      52428800,  -- 50MB
+      ARRAY['application/pdf', 'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+   'text/plain'],
+      false
+  );
+
+  확인 쿼리
+
+  -- 등록된 스토리지 확인
+  SELECT
+      public_id,
+      name,
+      storage_type,
+      base_path,
+      status,
+      pg_size_pretty(max_file_size::bigint) as max_size,
+      allowed_mime_types,
+      is_default
+  FROM managements.file_storages
+  WHERE is_deleted = false;
+
